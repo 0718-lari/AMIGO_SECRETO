@@ -308,3 +308,34 @@ footer {
     background: #8b2929;
     color: white;
 }
+
+
+/* RESULTADO DO PARTICIPANTE */
+
+#resultadoParticipante {
+    margin-top: 25px;
+    padding: 25px;
+    background: #173326;
+    border: 1px solid #d8bd7a;
+    border-radius: 12px;
+    text-align: center;
+}
+
+#resultadoParticipante p {
+    color: #c6d2ca;
+    margin-bottom: 12px;
+}
+
+#resultadoParticipante h3 {
+    color: #d8bd7a;
+    font-family: 'Playfair Display', serif;
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+#resultadoParticipante strong {
+    display: block;
+    color: #fffaf0;
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+}

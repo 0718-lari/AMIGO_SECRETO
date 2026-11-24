@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Painel do Organizador | Amigo Secreto</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body>
+
+    <header class="cabecalho">
+        <div class="marca">
+            <img src="Natal.png" alt="Logo de Natal">
+            <div>
+                <strong>Amigo Secreto</strong>
+                <span>EDIÇÃO DE NATAL ✨</span>
+            </div>
+        </div>
+
+        <button class="botao-sair" onclick="sairAdmin()">
+            Sair
+        </button>
+    </header>
+
+    <main class="painel">
+
+        <section class="boas-vindas">
+            <p class="subtitulo">ÁREA DO ORGANIZADOR</p>
+
+            <h1>Painel de <span>controle.</span></h1>
+
+            <p class="descricao">
+                Gerencie seu sorteio e acompanhe os participantes.
+            </p>
+        </section>
+
+        <section class="informacoes">
+
+            <div class="cartao-info">
+                <span>Participantes</span>
+                <strong id="totalParticipantes">0</strong>
+            </div>
+
+            <div class="cartao-info">
+                <span>Status do sorteio</span>
+                <strong id="statusSorteio">Carregando...</strong>
+            </div>
+
+        </section>
+
+        <section class="cartao-principal">
+
+            <div class="titulo-cartao">
+                <div>
+                    <p class="subtitulo">SEU SORTEIO</p>
+                    <h2 id="nomeSorteio">Carregando...</h2>
+                </div>
+            </div>
+
+            <div class="linha"></div>
+
+            <div class="participantes-cabecalho">
+                <h3>Participantes</h3>
+                <span id="contadorParticipantes">0 pessoas</span>
+            </div>
+
+            <ul id="listaParticipantes">
+                <li class="vazio">Carregando participantes...</li>
+            </ul>
+
+            <div class="acoes">
+                <button class="botao-encerrar" onclick="encerrarSorteio()">
+                    Encerrar sorteio
+                </button>
+
+                <button class="botao-excluir" onclick="excluirSorteio()">
+                    Excluir sorteio
+                </button>
+            </div>
+
+        </section>
+
+        <p class="aviso">
+            As informações deste painel são visíveis somente ao organizador.
+        </p>
+
+    </main>
+
+    <footer>
+        Feito para espalhar a magia do Natal ❤️
+    </footer>
+
+    <script src="admin.js"></script>
+
+</body>
+</html>

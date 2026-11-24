@@ -1,22 +1,37 @@
-import { db } from "./firebase.js";
 
 let participantes = [];
 
+// ELEMENTOS E NAVEGAÇÃO
+
+
 function irParaCriar() {
     document.querySelector(".principal").style.display = "none";
+    document.getElementById("telaParticipar").style.display = "none";
     document.getElementById("telaCriar").style.display = "block";
+}
+
+function irParaParticipar() {
+    document.querySelector(".principal").style.display = "none";
+    document.getElementById("telaCriar").style.display = "none";
+    document.getElementById("telaParticipar").style.display = "block";
 }
 
 function voltarInicio() {
     document.getElementById("telaCriar").style.display = "none";
+    document.getElementById("telaParticipar").style.display = "none";
     document.querySelector(".principal").style.display = "block";
 }
+
+window.irParaCriar = irParaCriar;
+window.irParaParticipar = irParaParticipar;
+window.voltarInicio = voltarInicio;
+// PARTICIPANTES
 
 function adicionarParticipante() {
     const campo = document.getElementById("nomeParticipante");
     const nome = campo.value.trim();
 
-    if (nome === "") {
+    if (!nome) {
         alert("Digite o nome do participante.");
         return;
     }
@@ -52,7 +67,7 @@ function atualizarLista() {
         texto.textContent = nome;
 
         const remover = document.createElement("button");
-        remover.innerHTML = "🗑";
+        remover.textContent = "🗑";
         remover.classList.add("botao-remover");
         remover.title = "Remover participante";
 
@@ -67,13 +82,19 @@ function atualizarLista() {
     });
 
     if (participantes.length === 0) {
-        lista.innerHTML =
-            '<li class="vazio">Nenhum participante adicionado.</li>';
+        const vazio = document.createElement("li");
+        vazio.classList.add("vazio");
+        vazio.textContent = "Nenhum participante adicionado.";
+        lista.appendChild(vazio);
     }
 
     contador.textContent =
         `${participantes.length} participantes adicionados`;
 }
+
+window.adicionarParticipante = adicionarParticipante;
+
+// CRIAR SORTEIO
 
 async function prepararSorteio() {
     const nomeSorteio = document
@@ -82,13 +103,13 @@ async function prepararSorteio() {
     const senhaAdmin = document
         .getElementById("senhaAdmin").value;
 
-    if (nomeSorteio === "") {
+    if (!nomeSorteio) {
         alert("Digite o nome do sorteio.");
         return;
     }
 
-    if (senhaAdmin === "") {
-        alert("Digite a senha do organizador.");
+    if (senhaAdmin.length < 8) {
+        alert("A senha deve ter pelo menos 8 caracteres.");
         return;
     }
 
@@ -103,54 +124,267 @@ async function prepararSorteio() {
     botao.textContent = "Criando sorteio...";
 
     try {
-        const resposta = await fetch(SUPABASE_FUNCTION_URL, {
+        // 1. Cria o sorteio no backend
+        const resposta = await fetch("/api/criar-sorteio", {
             method: "POST",
             headers: {
-                "Content-Type": "application/json",
-                "apikey": SUPABASE_ANON_KEY,
-                "Authorization": `Bearer ${SUPABASE_ANON_KEY}`
+                "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                acao: "criar",
-                senha_admin: senhaAdmin,
                 nome_sorteio: nomeSorteio,
+                senha_admin: senhaAdmin,
                 participantes: participantes
             })
         });
 
-        const textoResposta = await resposta.text();
-
-        console.log("Status:", resposta.status);
-        console.log("URL:", resposta.url);
-        console.log("Resposta:", textoResposta);
-        
-        let resultado = {};
-
-        try {
-            resultado = textoResposta ? JSON.parse(textoResposta) : {};
-        } catch {
-            throw new Error(
-                `Resposta inválida do servidor. HTTP ${resposta.status}. Conteúdo: ${textoResposta || "Vazio"}`
-            );
-        }
+        const resultado = await resposta.json();
 
         if (!resposta.ok) {
             throw new Error(
-                resultado.erro ||
-                resultado.mensagem ||
-                `Erro HTTP ${resposta.status}`
+                resultado.erro || "Não foi possível criar o sorteio."
             );
         }
-        console.log("Resultado do cadastro:", resultado);
 
-        alert("Sorteio criado com sucesso! 🎄");
+        // 2. Faz login do organizador
+        const respostaLogin = await fetch("/api/login-admin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                sorteioId: resultado.sorteioId,
+                senha: senhaAdmin
+            })
+        });
+
+        const dadosLogin = await respostaLogin.json();
+
+        if (!respostaLogin.ok) {
+            throw new Error(
+                dadosLogin.erro || "Não foi possível entrar no painel."
+            );
+        }
+
+        // 3. Guarda o token da sessão
+        sessionStorage.setItem(
+            "tokenAdmin",
+            dadosLogin.token
+        );
+
+        // 4. Mostra os códigos individuais
+        mostrarCodigos(
+            resultado.participantes,
+            resultado.sorteioId
+        );
 
     } catch (erro) {
         console.error("Erro:", erro);
-        alert("Erro ao criar sorteio: " + erro.message);
+        alert("Erro: " + erro.message);
 
-    } finally {
         botao.disabled = false;
         botao.textContent = "Continuar →";
     }
 }
+
+window.prepararSorteio = prepararSorteio;
+
+// MOSTRAR CÓDIGOS
+
+function mostrarCodigos(codigos, sorteioId) {
+    const tela = document.createElement("div");
+
+    tela.id = "telaCodigos";
+
+    tela.style.cssText = `
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #183B2D;
+        padding: 30px 20px;
+        overflow-y: auto;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+    `;
+
+    const conteudo = document.createElement("div");
+
+    conteudo.style.cssText = `
+        width: 100%;
+        max-width: 650px;
+        margin: 30px auto;
+        background: #214534;
+        border: 1px solid #49634c;
+        border-radius: 16px;
+        padding: 28px;
+        color: #fffaf0;
+        font-family: Arial, sans-serif;
+    `;
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = "Sorteio criado! 🎄";
+    titulo.style.color = "#d8bd7a";
+
+    const descricao = document.createElement("p");
+    descricao.textContent =
+        "Entregue a cada participante somente o código correspondente ao seu nome.";
+
+    descricao.style.cssText = "margin: 15px 0; line-height: 1.6;";
+
+    const aviso = document.createElement("p");
+    aviso.textContent =
+        "Guarde estes códigos! Eles não poderão ser recuperados em texto pelo painel depois.";
+    aviso.style.cssText = "color: #d8bd7a; margin-bottom: 20px;";
+
+    const lista = document.createElement("div");
+
+    codigos.forEach(pessoa => {
+        const linha = document.createElement("div");
+
+        linha.style.cssText = `
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #173326;
+            border-radius: 8px;
+        `;
+
+        const nome = document.createElement("strong");
+        nome.textContent = pessoa.participante;
+
+        const codigo = document.createElement("span");
+        codigo.textContent = pessoa.codigo;
+        codigo.style.cssText = `
+            color: #d8bd7a;
+            font-weight: bold;
+            letter-spacing: 2px;
+        `;
+
+        linha.append(nome, codigo);
+        lista.appendChild(linha);
+    });
+
+    const botaoCopiar = document.createElement("button");
+    botaoCopiar.textContent = "Copiar todos os códigos";
+
+    botaoCopiar.style.cssText = `
+        width: 100%;
+        padding: 14px;
+        margin-top: 15px;
+        background: #d8bd7a;
+        color: #183B2D;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    `;
+
+    botaoCopiar.onclick = async () => {
+        const texto = codigos
+            .map(p => `${p.participante}: ${p.codigo}`)
+            .join("\n");
+
+        try {
+            await navigator.clipboard.writeText(texto);
+            botaoCopiar.textContent = "Códigos copiados!";
+        } catch {
+            alert("Não foi possível copiar automaticamente. Anote os códigos exibidos.");
+        }
+    };
+
+    const botaoPainel = document.createElement("button");
+    botaoPainel.textContent = "Acessar painel do organizador →";
+
+    botaoPainel.style.cssText = `
+        width: 100%;
+        padding: 14px;
+        margin-top: 12px;
+        background: transparent;
+        color: #d8bd7a;
+        border: 1px solid #d8bd7a;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    `;
+
+    botaoPainel.onclick = () => {
+        window.location.href =
+            `admin.html?sorteio=${encodeURIComponent(sorteioId)}`;
+    };
+
+    conteudo.append(
+        titulo,
+        descricao,
+        aviso,
+        lista,
+        botaoCopiar,
+        botaoPainel
+    );
+
+    tela.appendChild(conteudo);
+    document.body.appendChild(tela);
+}
+
+// CONSULTAR RESULTADO
+
+async function consultarResultado() {
+    const campo = document.getElementById("codigoParticipante");
+    const resultadoDiv = document.getElementById("resultadoParticipante");
+    const botao = document.getElementById("botaoConsultar");
+
+    const codigo = campo.value.trim().toUpperCase();
+
+    if (!/^[A-F0-9]{8}$/.test(codigo)) {
+        alert("Digite um código válido de 8 caracteres.");
+        return;
+    }
+
+    botao.disabled = true;
+    botao.textContent = "Consultando...";
+
+    resultadoDiv.style.display = "none";
+
+    try {
+        const resposta = await fetch("/api/consultar-resultado", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ codigo })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || "Não foi possível consultar o resultado."
+            );
+        }
+
+        resultadoDiv.innerHTML = "";
+
+        const mensagem = document.createElement("p");
+        mensagem.textContent = "Olá, " + dados.participante + "!";
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = "Você tirou:";
+
+        const sorteado = document.createElement("strong");
+        sorteado.textContent = dados.sorteado;
+
+        resultadoDiv.append(mensagem, titulo, sorteado);
+        resultadoDiv.style.display = "block";
+
+    } catch (erro) {
+        alert(erro.message);
+
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Consultar resultado →";
+    }
+}
+
+window.consultarResultado = consultarResultado;

@@ -1,0 +1,277 @@
+
+/* CONFIGURAÇÕES GERAIS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: #183B2D;
+    color: #fffaf0;
+    font-family: 'DM Sans', sans-serif;
+}
+
+/* CABEÇALHO */
+.cabecalho {
+    padding: 28px 8%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.marca {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.marca img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+}
+
+.marca div {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.marca strong {
+    font-size: 21px;
+}
+
+.marca span {
+    color: #d8bd7a;
+    font-size: 10px;
+    letter-spacing: 2px;
+    font-weight: 700;
+}
+
+.botao-sair {
+    background: transparent;
+    border: 1px solid #d8bd7a;
+    color: #d8bd7a;
+    padding: 10px 22px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: 0.2s;
+}
+
+.botao-sair:hover {
+    background: #d8bd7a;
+    color: #183B2D;
+}
+
+/* PAINEL */
+.painel {
+    width: min(850px, 90%);
+    margin: 55px auto;
+    flex: 1;
+}
+
+.boas-vindas {
+    margin-bottom: 35px;
+}
+
+.subtitulo {
+    color: #d8bd7a;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.boas-vindas h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(38px, 6vw, 58px);
+    margin-bottom: 12px;
+}
+
+.boas-vindas h1 span {
+    color: #d8bd7a;
+}
+
+.descricao {
+    color: #c6d2ca;
+    font-size: 15px;
+}
+
+/* INFORMAÇÕES */
+.informacoes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+    margin-bottom: 25px;
+}
+
+.cartao-info {
+    background: #214534;
+    border: 1px solid #49634c;
+    border-radius: 14px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.cartao-info span {
+    color: #c6d2ca;
+    font-size: 13px;
+}
+
+.cartao-info strong {
+    color: #d8bd7a;
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+}
+
+/* CARTÃO PRINCIPAL */
+.cartao-principal {
+    background: #214534;
+    border: 1px solid #49634c;
+    border-radius: 16px;
+    padding: 30px;
+}
+
+.titulo-cartao h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 27px;
+}
+
+.linha {
+    height: 1px;
+    background: #49634c;
+    margin: 25px 0;
+}
+
+.participantes-cabecalho {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.participantes-cabecalho h3 {
+    font-size: 17px;
+}
+
+.participantes-cabecalho span {
+    color: #d8bd7a;
+    font-size: 12px;
+}
+
+/* LISTA */
+#listaParticipantes {
+    list-style: none;
+}
+
+#listaParticipantes li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: #173326;
+    border: 1px solid #49634c;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    color: #fffaf0;
+}
+
+#listaParticipantes .vazio {
+    color: #c6d2ca;
+    justify-content: center;
+    font-size: 13px;
+}
+
+/* BOTÕES DE AÇÃO */
+.acoes {
+    display: flex;
+    gap: 12px;
+    margin-top: 28px;
+    flex-wrap: wrap;
+}
+
+.acoes button {
+    flex: 1;
+    min-width: 180px;
+    padding: 13px 18px;
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-encerrar {
+    background: transparent;
+    border: 1px solid #d8bd7a;
+    color: #d8bd7a;
+}
+
+.botao-encerrar:hover {
+    background: #d8bd7a;
+    color: #183B2D;
+}
+
+.botao-excluir {
+    background: #7c3535;
+    border: 1px solid #a34d4d;
+    color: white;
+}
+
+.botao-excluir:hover {
+    background: #963f3f;
+}
+
+/* AVISO E RODAPÉ */
+.aviso {
+    color: #aebfb3;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 22px;
+}
+
+footer {
+    text-align: center;
+    padding: 25px;
+    color: #aebfb3;
+    font-size: 12px;
+}
+
+/* RESPONSIVIDADE */
+@media (max-width: 600px) {
+    .cabecalho {
+        padding: 22px 5%;
+    }
+
+    .marca strong {
+        font-size: 17px;
+    }
+
+    .painel {
+        margin: 35px auto;
+    }
+
+    .informacoes {
+        grid-template-columns: 1fr;
+    }
+
+    .cartao-principal {
+        padding: 22px 17px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    .acoes button {
+        width: 100%;
+    }
+}

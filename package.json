@@ -1,0 +1,26 @@
+{
+  "name": "amigosecreto",
+  "version": "1.0.0",
+  "description": "",
+  "main": "config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/0718-lari/AMIGO_SECRETO.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/0718-lari/AMIGO_SECRETO/issues"
+  },
+  "homepage": "https://github.com/0718-lari/AMIGO_SECRETO#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "firebase-admin": "^14.5.1",
+    "jsonwebtoken": "^9.0.3"
+  }
+}

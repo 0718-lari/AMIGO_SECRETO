@@ -103,6 +103,37 @@
             </div>
         </section>
 
+        <!-- TELA DE PARTICIPAR -->
+        <section class="tela-participar" id="telaParticipar" style="display: none;">
+
+            <div class="formulario">
+
+                <p class="subtitulo">PARTICIPAR DO SORTEIO</p>
+
+                <h2>Descubra quem você tirou!</h2>
+
+                <p class="descricao">
+                    Digite o código que o organizador entregou para você.
+                </p>
+
+                <label for="codigoParticipante">Seu código</label>
+
+                <input type="text" id="codigoParticipante" placeholder="Ex: A1B2C3D4" maxlength="8" autocomplete="off">
+
+                <button class="criar-sorteio" id="botaoConsultar" onclick="consultarResultado()">
+                    Consultar resultado →
+                </button>
+
+                <div id="resultadoParticipante" style="display: none;"></div>
+
+                <button class="botao-secundario" onclick="voltarInicio()">
+                    Voltar ao início
+                </button>
+
+            </div>
+
+        </section>
+
     </main>
 
     <footer>
