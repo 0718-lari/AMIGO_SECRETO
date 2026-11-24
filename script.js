@@ -337,7 +337,7 @@ async function consultarResultado() {
 
     const codigo = campo.value.trim().toUpperCase();
 
-    if (!/^[A-F0-9]{8}$/.test(codigo)) {
+    if (!/^[A-F0-9]{12}$/.test(codigo)) {
         alert("Digite um código válido de 8 caracteres.");
         return;
     }

@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
 
         if (
             typeof codigo !== "string" ||
-            !/^[a-fA-F0-9]{8}$/.test(codigo)
+            !/^[a-fA-F0-9]{12}$/.test(codigo)
         ) {
             return res.status(400).json({
                 erro: "Código inválido."

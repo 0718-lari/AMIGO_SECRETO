@@ -17,7 +17,7 @@ if (!admin.apps.length) {
 const db = admin.firestore();
 
 function gerarCodigo() {
-    return crypto.randomBytes(4).toString("hex").toUpperCase();
+    return crypto.randomBytes(6).toString("hex").toUpperCase();
 }
 
 function embaralhar(lista) {
