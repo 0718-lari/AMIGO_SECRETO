@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amigo Secreto</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <img src="Natal.png" alt="Logo Amigo Secreto">
+            <span>Amigo Secreto</span>
+        </div>
+        <span class="ano">EDIÇÃO DE NATAL ✨</span>
+    </header>
+
+    <main>
+        <section class="principal">
+            <div class="enfeite">✦ ✧ ❄ ✧ ✦</div>
+
+            <p class="subtitulo">UMA ÉPOCA DE PRESENTEAR E COMPARTILHAR</p>
+
+            <h1>
+                O Natal fica <br> melhor quando <br><span>compartilhamos.</span>
+            </h1>
+
+            <p class="descricao"> Reúna pessoas especiais, organize seu amigo secreto e descubra quem você vai
+                presentear!</p>
+
+            <div class="acoes">
+                <button class="botao-principal" onclick="irParaCriar()">Crie amigo secreto</button>
+                <button class="botao-secundario" onclick="irParaParticipar()">Já tenho um código</button>
+            </div>
+
+            <div class="detalhe"><span>🎁</span><span>Compartilhe momentos especiais neste Natal.</span></div>
+        </section>
+
+
+        <section class="tela-criar" id="telaCriar">
+
+            <button class="voltar" onclick="voltarInicio()">
+                ← Voltar
+            </button>
+
+            <div class="formulario">
+                <div class="enfeite">🎁 ✨ 🎄</div>
+
+                <p class="subtitulo">COMECE A ORGANIZAR</p>
+
+                <h1>Crie seu <span>amigo secreto</span></h1>
+
+                <p class="descricao">
+                    Dê um nome ao seu sorteio e adicione as pessoas
+                    que vão participar dessa surpresa.
+                </p>
+
+                <div class="campo">
+                    <label for="nomeSorteio">Nome do sorteio</label>
+                    <input type="text" id="nomeSorteio" placeholder="Ex.: Natal em Família">
+                </div>
+
+                <div class="campo">
+                    <label for="senhaAdmin">Senha do organizador</label>
+                    <input type="password" id="senhaAdmin" placeholder="Digite sua senha de administrador">
+                </div>
+
+
+                <div class="campo">
+                    <label for="nomeParticipante">Nome do participante</label>
+
+                    <div class="adicionar">
+                        <input type="text" id="nomeParticipante" placeholder="Digite um nome">
+
+                        <button onclick="adicionarParticipante()">
+                            +
+                        </button>
+                    </div>
+                </div>
+
+                <div class="lista">
+                    <h3>Participantes adicionados</h3>
+                    <ul id="listaParticipantes">
+                        <li class="vazio">Nenhum participante adicionado.</li>
+                    </ul>
+                </div>
+
+                <button class="botao-principal criar-sorteio" onclick="prepararSorteio()">
+                    Continuar →
+                </button>
+
+                <p class="contador" id="contador">
+                    0 participantes adicionados
+                </p>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        Feito para espalhar a magia do Natal ❤️
+    </footer>
+
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

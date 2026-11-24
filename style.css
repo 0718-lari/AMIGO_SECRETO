@@ -1,0 +1,310 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    background: #183B2D;
+    color: #fffaf0;
+    font-family: 'DM Sans', sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    width: 100%;
+    padding: 28px 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 21px;
+    font-weight: 700;
+}
+
+.logo img {
+    width: 48px;
+    height: 48px;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.ano {
+    color: #d8bd7a;
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+main {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+}
+
+.principal {
+    max-width: 720px;
+    text-align: center;
+}
+
+.enfeite {
+    color: #d9bd75;
+    font-size: 25px;
+    margin-bottom: 25px;
+    letter-spacing: 12px;
+}
+
+.subtitulo {
+    color: #d9bd75;
+    font-size: 11px;
+    letter-spacing: 3px;
+    margin-bottom: 22px;
+}
+
+h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(42px, 7vw, 72px);
+    line-height: 1.12;
+    margin-bottom: 25px;
+}
+
+h1 span {
+    color: #d9bd75;
+}
+
+.descricao {
+    max-width: 490px;
+    margin: 0 auto;
+    color: #c6d2ca;
+    font-size: 16px;
+    line-height: 1.8;
+}
+
+.acoes {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-top: 35px;
+}
+
+button {
+    padding: 16px 25px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-principal {
+    background: #d8bd7a;
+    color: #173326;
+    border: none;
+}
+
+.botao-principal:hover {
+    background: #ead49b;
+    transform: translateY(-2px);
+}
+
+.botao-secundario {
+    background: transparent;
+    border: 1px solid #d8bd7a;
+    color: #fffaf0;
+}
+
+.botao-secundario:hover {
+    background: #ffffff12;
+}
+
+.detalhe {
+    margin-top: 55px;
+    color: #c6d2ca;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.detalhe span:first-child {
+    font-size: 22px;
+}
+
+footer {
+    padding: 25px;
+    text-align: center;
+    color: #9eafa3;
+    font-size: 12px;
+}
+
+@media (max-width: 600px) {
+    header {
+        padding: 22px 6%;
+    }
+
+    .logo {
+        font-size: 17px;
+    }
+
+    .ano {
+        font-size: 9px;
+    }
+
+    .acoes {
+        flex-direction: column;
+    }
+
+    button {
+        width: 100%;
+    }
+}
+
+
+/* TELA DE CRIAR SORTEIO */
+
+.tela-criar {
+    display: none;
+    width: 100%;
+    max-width: 650px;
+    margin: 0 auto;
+    padding: 25px 20px 60px;
+}
+
+.voltar {
+    background: transparent;
+    border: 1px solid #d8bd7a;
+    color: #fffaf0;
+    padding: 10px 18px;
+    margin-bottom: 30px;
+}
+
+.formulario {
+    background: #214534;
+    border: 1px solid #49634c;
+    border-radius: 16px;
+    padding: 35px;
+    text-align: center;
+}
+
+.formulario h1 {
+    font-size: 42px;
+}
+
+.campo {
+    text-align: left;
+    margin-top: 25px;
+}
+
+.campo label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.campo input {
+    width: 100%;
+    padding: 15px;
+    border: 1px solid #607967;
+    border-radius: 8px;
+    background: #173326;
+    color: white;
+    outline: none;
+    font-size: 14px;
+}
+
+.campo input:focus {
+    border-color: #d8bd7a;
+}
+
+.campo input::placeholder {
+    color: #aab8ae;
+}
+
+.adicionar {
+    display: flex;
+    gap: 10px;
+}
+
+.adicionar button {
+    background: #d8bd7a;
+    color: #173326;
+    border: none;
+    font-size: 22px;
+    width: 55px;
+}
+
+.lista {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.lista h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.lista ul {
+    list-style: none;
+}
+
+.lista li {
+    padding: 13px;
+    background: #173326;
+    border-radius: 7px;
+    margin-bottom: 8px;
+    color: #fffaf0;
+}
+
+.lista .vazio {
+    color: #aab8ae;
+    font-size: 13px;
+}
+
+.criar-sorteio {
+    width: 100%;
+    margin-top: 25px;
+}
+
+.contador {
+    margin-top: 15px;
+    font-size: 12px;
+    color: #c6d2ca;
+}
+
+@media (max-width: 600px) {
+    .formulario {
+        padding: 25px 18px;
+    }
+
+    .formulario h1 {
+        font-size: 34px;
+    }
+}
+
+.botao-remover {
+    margin-left: auto;
+    padding: 8px 10px;
+    background: transparent;
+    border: 1px solid #a84b4b;
+    color: #ff8585;
+    border-radius: 7px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.botao-remover:hover {
+    background: #8b2929;
+    color: white;
+}
