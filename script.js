@@ -262,6 +262,59 @@ function mostrarCodigos(codigos, sorteioId) {
 
     aviso.style.cssText = "color: #d8bd7a; margin-bottom: 20px;";
 
+    const identificador = document.createElement("div");
+
+    identificador.style.cssText = `
+    background: #173326;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+`;
+
+    const textoIdentificador = document.createElement("p");
+    textoIdentificador.textContent = "Identificador do sorteio:";
+    textoIdentificador.style.marginBottom = "10px";
+
+    const codigoSorteio = document.createElement("strong");
+    codigoSorteio.textContent = sorteioId;
+    codigoSorteio.style.cssText = `
+    color: #d8bd7a;
+    font-size: 18px;
+    letter-spacing: 1px;
+    word-break: break-all;
+`;
+
+    const botaoCopiarId = document.createElement("button");
+    botaoCopiarId.textContent = "Copiar identificador";
+
+    botaoCopiarId.style.cssText = `
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    background: transparent;
+    color: #d8bd7a;
+    border: 1px solid #d8bd7a;
+    border-radius: 8px;
+    cursor: pointer;
+`;
+
+    botaoCopiarId.onclick = async () => {
+        try {
+            await navigator.clipboard.writeText(sorteioId);
+            botaoCopiarId.textContent = "Identificador copiado!";
+        } catch {
+            alert("Não foi possível copiar o identificador.");
+        }
+    };
+
+    identificador.append(
+        textoIdentificador,
+        codigoSorteio,
+        botaoCopiarId
+    );
+
+
     const lista = document.createElement("div");
 
     codigos.forEach(pessoa => {
@@ -348,6 +401,7 @@ function mostrarCodigos(codigos, sorteioId) {
         titulo,
         descricao,
         aviso,
+        identificador,
         lista,
         botaoCopiar,
         botaoPainel
