@@ -438,3 +438,36 @@ footer {
     opacity: 0.6;
     cursor: not-allowed;
 }
+
+
+/* BOTÃO VOLTAR AO INÍCIO - RESULTADO */
+
+.botao-voltar-inicio {
+    display: block;
+    width: 100%;
+    max-width: 250px;
+    margin: 30px auto 0;
+    padding: 13px 20px;
+
+    background: transparent;
+    color: #d8bd7a;
+    border: 1px solid #d8bd7a;
+    border-radius: 8px;
+
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.botao-voltar-inicio:hover {
+    background: #d8bd7a;
+    color: #183B2D;
+    transform: translateY(-2px);
+}
+
+.botao-voltar-inicio:active {
+    transform: translateY(0);
+}

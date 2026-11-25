@@ -458,8 +458,8 @@ async function consultarResultado() {
         nome.textContent = dados.sorteado;
 
         const voltar = document.createElement("button");
-        voltar.textContent = "Voltar ao início";
-        voltar.classList.add("criar-sorteio");
+        voltar.textContent = "← Voltar ao início";
+        voltar.classList.add("botao-voltar-inicio");
         voltar.onclick = voltarInicio;
 
         resultadoDiv.append(

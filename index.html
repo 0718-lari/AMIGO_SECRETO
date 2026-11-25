@@ -146,41 +146,53 @@
 
         </section>
 
-        <!-- TELA DO ORGANIZADOR -->
-        <section class="tela-admin-login" id="telaAdminLogin" style="display: none;">
+<!-- TELA DO ORGANIZADOR -->
+<section class="tela-admin-login" id="telaAdminLogin" style="display: none;">
 
-            <button class="voltar" onclick="voltarInicio()">
-                ← Voltar
-            </button>
+    <button class="voltar" onclick="voltarInicio()">
+        ← Voltar
+    </button>
 
-            <div class="formulario">
+    <div class="formulario">
 
-                <div class="enfeite">🎄 🔐 ✨</div>
+        <div class="enfeite">🎄 🔐 ✨</div>
 
-                <p class="subtitulo">ÁREA RESTRITA</p>
+        <p class="subtitulo">ÁREA RESTRITA</p>
 
-                <h2>Acesso do <span>organizador</span></h2>
+        <h2>Acesso do <span>organizador</span></h2>
 
-                <p class="descricao">
-                    Entre com os dados do seu sorteio para acessar o painel.
-                </p>
+        <p class="descricao">
+            Entre com os dados do seu sorteio para acessar o painel.
+        </p>
 
-                <div class="campo">
-                    <label for="sorteioIdAdmin">Identificador do sorteio</label>
-                    <input type="text" id="sorteioIdAdmin" placeholder="Digite o identificador do sorteio">
-                </div>
+        <div class="campo">
+            <label for="sorteioIdAdmin">Identificador do sorteio</label>
+            <input
+                type="text"
+                id="sorteioIdAdmin"
+                placeholder="Digite o identificador do sorteio"
+            >
+        </div>
 
-                <div class="campo">
-                    <label for="senhaLoginAdmin">Senha do organizador</label>
-                    <input type="password" id="senhaLoginAdmin" placeholder="Digite sua senha">
-                </div>
+        <div class="campo">
+            <label for="senhaLoginAdmin">Senha do organizador</label>
+            <input
+                type="password"
+                id="senhaLoginAdmin"
+                placeholder="Digite sua senha"
+            >
+        </div>
 
-                <button class="botao-principal" id="botaoLoginAdmin" onclick="loginOrganizador()">
-                    Entrar no painel →
-                </button>
+        <button
+            class="botao-principal"
+            id="botaoLoginAdmin"
+            onclick="loginOrganizador()"
+        >
+            Entrar no painel →
+        </button>
 
-            </div>
-        </section>
+    </div>
+</section>
 
 
     </main>
