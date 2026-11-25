@@ -116,19 +116,20 @@
                     Digite o código que o organizador entregou para você.
                 </p>
 
-                <label for="codigoParticipante">Seu código</label>
+                <div id="formularioConsulta">
 
-                <input type="text" id="codigoParticipante" placeholder="Ex: A1B2C3D4E5F6" maxlength="12" autocomplete="off">
+                    <label for="codigoParticipante">Seu código</label>
 
-                <button class="criar-sorteio" id="botaoConsultar" onclick="consultarResultado()">
-                    Consultar resultado →
-                </button>
+                    <input type="text" id="codigoParticipante" placeholder="Ex: A7K2M9" maxlength="6" minlength="6"
+                        autocomplete="off" autocapitalize="characters">
+
+                    <button class="criar-sorteio" id="botaoConsultar" onclick="consultarResultado()">
+                        Consultar resultado →
+                    </button>
+
+                </div>
 
                 <div id="resultadoParticipante" style="display: none;"></div>
-
-                <button class="botao-secundario" onclick="voltarInicio()">
-                    Voltar ao início
-                </button>
 
             </div>
 

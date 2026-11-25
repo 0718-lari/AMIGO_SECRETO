@@ -1,3 +1,4 @@
+
 const { initializeApp, cert, getApps } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 
@@ -6,7 +7,10 @@ const autenticarAdmin = require("../lib/autenticar-admin");
 // Inicialização do Firebase
 if (getApps().length === 0) {
     const credencial = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT
+        Buffer.from(
+            process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
+            "base64"
+        ).toString("utf8")
     );
 
     initializeApp({
@@ -15,6 +19,7 @@ if (getApps().length === 0) {
 }
 
 const db = getFirestore();
+
 module.exports = async (req, res) => {
     if (req.method !== "POST") {
         return res.status(405).json({
@@ -69,6 +74,12 @@ module.exports = async (req, res) => {
         }
 
         if (acao === "encerrar") {
+            if (dados.status !== "ativo") {
+                return res.status(400).json({
+                    erro: "Este sorteio já está encerrado."
+                });
+            }
+
             await sorteioRef.update({
                 status: "encerrado"
             });

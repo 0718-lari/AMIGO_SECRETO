@@ -1,11 +1,17 @@
+
 const { initializeApp, cert, getApps } = require("firebase-admin/app");
 const { getFirestore } = require("firebase-admin/firestore");
 const crypto = require("crypto");
 
+const limitarTentativas = require("../lib/rate-limit");
+
 // Inicialização do Firebase
 if (getApps().length === 0) {
     const credencial = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT
+        Buffer.from(
+            process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
+            "base64"
+        ).toString("utf8")
     );
 
     initializeApp({
@@ -14,6 +20,7 @@ if (getApps().length === 0) {
 }
 
 const db = getFirestore();
+
 module.exports = async (req, res) => {
     if (req.method !== "POST") {
         return res.status(405).json({
@@ -22,11 +29,28 @@ module.exports = async (req, res) => {
     }
 
     try {
+        // Limita consultas por IP: 10 tentativas a cada 15 minutos.
+        const limite = await limitarTentativas(
+            db,
+            req,
+            "consulta-resultado",
+            10,
+            15 * 60 * 1000
+        );
+
+        if (!limite.permitido) {
+            res.setHeader("Retry-After", limite.aguardar);
+
+            return res.status(429).json({
+                erro: "Muitas tentativas. Aguarde alguns minutos."
+            });
+        }
+
         const { codigo } = req.body || {};
 
         if (
             typeof codigo !== "string" ||
-            !/^[a-fA-F0-9]{12}$/.test(codigo)
+            !/^[A-HJ-NP-Z2-9]{6}$/.test(codigo)
         ) {
             return res.status(400).json({
                 erro: "Código inválido."

@@ -1,3 +1,4 @@
+
 const { initializeApp, cert, getApps } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const bcrypt = require("bcryptjs");
@@ -19,12 +20,21 @@ if (getApps().length === 0) {
 
 const db = getFirestore();
 
-// Gera código individual de 12 caracteres
+// Alfabeto de 32 caracteres, sem caracteres confundíveis.
+const ALFABETO = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+
+// Gera um código aleatório de 6 caracteres.
 function gerarCodigo() {
-    return crypto.randomBytes(6).toString("hex").toUpperCase();
+    let codigo = "";
+
+    for (let i = 0; i < 6; i++) {
+        codigo += ALFABETO[crypto.randomInt(ALFABETO.length)];
+    }
+
+    return codigo;
 }
 
-// Embaralha os participantes
+// Embaralha os participantes.
 function embaralhar(lista) {
     const resultado = [...lista];
 
@@ -52,10 +62,11 @@ module.exports = async (req, res) => {
 
         if (
             typeof nome_sorteio !== "string" ||
-            !nome_sorteio.trim()
+            !nome_sorteio.trim() ||
+            nome_sorteio.trim().length > 100
         ) {
             return res.status(400).json({
-                erro: "Informe o nome do sorteio."
+                erro: "Informe um nome de sorteio válido."
             });
         }
 
@@ -98,7 +109,7 @@ module.exports = async (req, res) => {
             });
         }
 
-        // Cria uma distribuição sem auto-sorteio
+        // Cria uma distribuição sem auto-sorteio.
         const embaralhados = embaralhar(nomes);
 
         const deslocamento = crypto.randomInt(
@@ -112,12 +123,11 @@ module.exports = async (req, res) => {
             ]
         );
 
-        // Protege a senha do organizador
+        // Protege a senha do organizador.
         const senhaHash = await bcrypt.hash(senha_admin, 12);
 
-        // Cria o sorteio no Firestore
+        // Cria o sorteio no Firestore.
         const sorteioRef = db.collection("sorteios").doc();
-
         const lote = db.batch();
 
         lote.set(sorteioRef, {
@@ -129,9 +139,17 @@ module.exports = async (req, res) => {
         });
 
         const codigosParaOrganizador = [];
+        const codigosGerados = new Set();
 
         for (let i = 0; i < nomes.length; i++) {
-            const codigo = gerarCodigo();
+            let codigo;
+
+            // Evita códigos repetidos dentro do mesmo sorteio.
+            do {
+                codigo = gerarCodigo();
+            } while (codigosGerados.has(codigo));
+
+            codigosGerados.add(codigo);
 
             const codigoHash = crypto
                 .createHash("sha256")

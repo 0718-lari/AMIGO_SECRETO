@@ -3,7 +3,6 @@ let participantes = [];
 
 // ELEMENTOS E NAVEGAÇÃO
 
-
 function irParaCriar() {
     document.querySelector(".principal").style.display = "none";
     document.getElementById("telaParticipar").style.display = "none";
@@ -14,18 +13,26 @@ function irParaParticipar() {
     document.querySelector(".principal").style.display = "none";
     document.getElementById("telaCriar").style.display = "none";
     document.getElementById("telaParticipar").style.display = "block";
+
+    document.getElementById("formularioConsulta").style.display = "block";
+    document.getElementById("resultadoParticipante").style.display = "none";
 }
 
 function voltarInicio() {
     document.getElementById("telaCriar").style.display = "none";
     document.getElementById("telaParticipar").style.display = "none";
     document.querySelector(".principal").style.display = "block";
+
+    document.getElementById("formularioConsulta").style.display = "block";
+    document.getElementById("resultadoParticipante").style.display = "none";
+    document.getElementById("codigoParticipante").value = "";
 }
 
 window.irParaCriar = irParaCriar;
 window.irParaParticipar = irParaParticipar;
 window.voltarInicio = voltarInicio;
-// PARTICIPANTES
+
+// ADICIONAR PARTICIPANTES
 
 function adicionarParticipante() {
     const campo = document.getElementById("nomeParticipante");
@@ -60,9 +67,6 @@ function atualizarLista() {
     participantes.forEach((nome, indice) => {
         const item = document.createElement("li");
 
-        item.style.display = "flex";
-        item.style.alignItems = "center";
-
         const texto = document.createElement("span");
         texto.textContent = nome;
 
@@ -78,6 +82,7 @@ function atualizarLista() {
 
         item.appendChild(texto);
         item.appendChild(remover);
+
         lista.appendChild(item);
     });
 
@@ -118,13 +123,16 @@ async function prepararSorteio() {
         return;
     }
 
-    const botao = document.querySelector(".criar-sorteio");
+    const botao = document.querySelector(
+        "#telaCriar .criar-sorteio"
+    );
 
     botao.disabled = true;
     botao.textContent = "Criando sorteio...";
 
     try {
         // 1. Cria o sorteio no backend
+
         const resposta = await fetch("/api/criar-sorteio", {
             method: "POST",
             headers: {
@@ -146,6 +154,7 @@ async function prepararSorteio() {
         }
 
         // 2. Faz login do organizador
+
         const respostaLogin = await fetch("/api/login-admin", {
             method: "POST",
             headers: {
@@ -166,12 +175,14 @@ async function prepararSorteio() {
         }
 
         // 3. Guarda o token da sessão
+
         sessionStorage.setItem(
             "tokenAdmin",
             dadosLogin.token
         );
 
         // 4. Mostra os códigos individuais
+
         mostrarCodigos(
             resultado.participantes,
             resultado.sorteioId
@@ -234,6 +245,7 @@ function mostrarCodigos(codigos, sorteioId) {
     const aviso = document.createElement("p");
     aviso.textContent =
         "Guarde estes códigos! Eles não poderão ser recuperados em texto pelo painel depois.";
+
     aviso.style.cssText = "color: #d8bd7a; margin-bottom: 20px;";
 
     const lista = document.createElement("div");
@@ -257,6 +269,7 @@ function mostrarCodigos(codigos, sorteioId) {
 
         const codigo = document.createElement("span");
         codigo.textContent = pessoa.codigo;
+
         codigo.style.cssText = `
             color: #d8bd7a;
             font-weight: bold;
@@ -291,7 +304,9 @@ function mostrarCodigos(codigos, sorteioId) {
             await navigator.clipboard.writeText(texto);
             botaoCopiar.textContent = "Códigos copiados!";
         } catch {
-            alert("Não foi possível copiar automaticamente. Anote os códigos exibidos.");
+            alert(
+                "Não foi possível copiar automaticamente. Anote os códigos exibidos."
+            );
         }
     };
 
@@ -333,19 +348,18 @@ function mostrarCodigos(codigos, sorteioId) {
 async function consultarResultado() {
     const campo = document.getElementById("codigoParticipante");
     const resultadoDiv = document.getElementById("resultadoParticipante");
+    const formulario = document.getElementById("formularioConsulta");
     const botao = document.getElementById("botaoConsultar");
 
     const codigo = campo.value.trim().toUpperCase();
 
-    if (!/^[A-F0-9]{12}$/.test(codigo)) {
-        alert("Digite um código válido de  caracteres.");
+    if (!/^[A-HJ-NP-Z2-9]{6}$/.test(codigo)) {
+        alert("Digite um código válido de 6 caracteres.");
         return;
     }
 
     botao.disabled = true;
     botao.textContent = "Consultando...";
-
-    resultadoDiv.style.display = "none";
 
     try {
         const resposta = await fetch("/api/consultar-resultado", {
@@ -360,22 +374,34 @@ async function consultarResultado() {
 
         if (!resposta.ok) {
             throw new Error(
-                dados.erro || "Não foi possível consultar o resultado."
+                dados.erro || "Não foi possível consultar."
             );
         }
 
         resultadoDiv.innerHTML = "";
 
-        const mensagem = document.createElement("p");
-        mensagem.textContent = "Olá, " + dados.participante + "!";
+        const saudacao = document.createElement("p");
+        saudacao.textContent = `Olá, ${dados.participante}!`;
 
         const titulo = document.createElement("h3");
         titulo.textContent = "Você tirou:";
 
-        const sorteado = document.createElement("strong");
-        sorteado.textContent = dados.sorteado;
+        const nome = document.createElement("strong");
+        nome.textContent = dados.sorteado;
 
-        resultadoDiv.append(mensagem, titulo, sorteado);
+        const voltar = document.createElement("button");
+        voltar.textContent = "Voltar ao início";
+        voltar.classList.add("criar-sorteio");
+        voltar.onclick = voltarInicio;
+
+        resultadoDiv.append(
+            saudacao,
+            titulo,
+            nome,
+            voltar
+        );
+
+        formulario.style.display = "none";
         resultadoDiv.style.display = "block";
 
     } catch (erro) {
