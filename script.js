@@ -3,6 +3,9 @@ let participantes = [];
 
 // ELEMENTOS E NAVEGAÇÃO
 
+
+// ELEMENTOS E NAVEGAÇÃO
+
 function irParaCriar() {
     document.querySelector(".principal").style.display = "none";
     document.getElementById("telaParticipar").style.display = "none";
@@ -142,6 +145,8 @@ async function prepararSorteio() {
     botao.textContent = "Criando sorteio...";
 
     try {
+        // 1. Cria o sorteio no backend
+
         const resposta = await fetch("/api/criar-sorteio", {
             method: "POST",
             headers: {
@@ -162,6 +167,8 @@ async function prepararSorteio() {
             );
         }
 
+        // 2. Faz login do organizador
+
         const respostaLogin = await fetch("/api/login-admin", {
             method: "POST",
             headers: {
@@ -181,10 +188,14 @@ async function prepararSorteio() {
             );
         }
 
+        // 3. Guarda o token da sessão
+
         sessionStorage.setItem(
             "tokenAdmin",
             dadosLogin.token
         );
+
+        // 4. Mostra os códigos individuais
 
         mostrarCodigos(
             resultado.participantes,
@@ -254,11 +265,11 @@ function mostrarCodigos(codigos, sorteioId) {
     const identificador = document.createElement("div");
 
     identificador.style.cssText = `
-        background: #173326;
-        padding: 15px;
-        border-radius: 8px;
-        margin-bottom: 20px;
-    `;
+    background: #173326;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+`;
 
     const textoIdentificador = document.createElement("p");
     textoIdentificador.textContent = "Identificador do sorteio:";
@@ -266,28 +277,27 @@ function mostrarCodigos(codigos, sorteioId) {
 
     const codigoSorteio = document.createElement("strong");
     codigoSorteio.textContent = sorteioId;
-
     codigoSorteio.style.cssText = `
-        color: #d8bd7a;
-        font-size: 18px;
-        letter-spacing: 1px;
-        word-break: break-all;
-    `;
+    color: #d8bd7a;
+    font-size: 18px;
+    letter-spacing: 1px;
+    word-break: break-all;
+`;
 
     const botaoCopiarId = document.createElement("button");
     botaoCopiarId.textContent = "Copiar identificador";
 
     botaoCopiarId.style.cssText = `
-        display: block;
-        width: 100%;
-        padding: 10px;
-        margin-top: 12px;
-        background: transparent;
-        color: #d8bd7a;
-        border: 1px solid #d8bd7a;
-        border-radius: 8px;
-        cursor: pointer;
-    `;
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 12px;
+    background: transparent;
+    color: #d8bd7a;
+    border: 1px solid #d8bd7a;
+    border-radius: 8px;
+    cursor: pointer;
+`;
 
     botaoCopiarId.onclick = async () => {
         try {
@@ -304,7 +314,6 @@ function mostrarCodigos(codigos, sorteioId) {
         botaoCopiarId
     );
 
-    // LISTA DE CÓDIGOS INDIVIDUAIS
 
     const lista = document.createElement("div");
 
@@ -315,46 +324,222 @@ function mostrarCodigos(codigos, sorteioId) {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            padding: 14px;
+            gap: 12px;
+            padding: 12px;
             margin-bottom: 10px;
             background: #173326;
             border-radius: 8px;
         `;
 
-        const informacoes = document.createElement("div");
-
         const nome = document.createElement("strong");
         nome.textContent = pessoa.participante;
 
-        const codigo = document.createElement("p");
+        const codigo = document.createElement("span");
         codigo.textContent = pessoa.codigo;
 
         codigo.style.cssText = `
             color: #d8bd7a;
             font-weight: bold;
             letter-spacing: 2px;
-            margin-top: 6px;
-            font-size: 16px;
         `;
 
-        informacoes.append(nome, codigo);
+        linha.append(nome, codigo);
+        lista.appendChild(linha);
+    });
 
-        const botaoCopiarIndividual = document.createElement("button");
-        botaoCopiarIndividual.textContent = "📋 Copiar código";
+    const botaoCopiar = document.createElement("button");
+    botaoCopiar.textContent = "Copiar todos os códigos";
 
-        botaoCopiarIndividual.style.cssText = `
-            padding: 10px 14px;
-            background: #d8bd7a;
-            color: #183B2D;
-            border: none;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-        `;
+    botaoCopiar.style.cssText = `
+        width: 100%;
+        padding: 14px;
+        margin-top: 15px;
+        background: #d8bd7a;
+        color: #183B2D;
+        border: none;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    `;
 
-        botaoCopiarIndividual.onclick = async () => {
+    botaoCopiar.onclick = async () => {
+        const texto = codigos
+            .map(p => `${p.participante}: ${p.codigo}`)
+            .join("\n");
+
+        try {
+            await navigator.clipboard.writeText(texto);
+            botaoCopiar.textContent = "Códigos copiados!";
+        } catch {
+            alert(
+                "Não foi possível copiar automaticamente. Anote os códigos exibidos."
+            );
+        }
+    };
+
+    const botaoPainel = document.createElement("button");
+    botaoPainel.textContent = "Acessar painel do organizador →";
+
+    botaoPainel.style.cssText = `
+        width: 100%;
+        padding: 14px;
+        margin-top: 12px;
+        background: transparent;
+        color: #d8bd7a;
+        border: 1px solid #d8bd7a;
+        border-radius: 8px;
+        font-weight: bold;
+        cursor: pointer;
+    `;
+
+    botaoPainel.onclick = () => {
+        window.location.href =
+            `admin.html?sorteio=${encodeURIComponent(sorteioId)}`;
+    };
+
+    conteudo.append(
+        titulo,
+        descricao,
+        aviso,
+        identificador,
+        lista,
+        botaoCopiar,
+        botaoPainel
+    );
+
+    tela.appendChild(conteudo);
+    document.body.appendChild(tela);
+}
+
+// CONSULTAR RESULTADO
+
+async function consultarResultado() {
+    const campo = document.getElementById("codigoParticipante");
+    const resultadoDiv = document.getElementById("resultadoParticipante");
+    const formulario = document.getElementById("formularioConsulta");
+    const botao = document.getElementById("botaoConsultar");
+
+    const codigo = campo.value.trim().toUpperCase();
+
+    if (!/^[A-HJ-NP-Z2-9]{6}$/.test(codigo)) {
+        alert("Digite um código válido de 6 caracteres.");
+        return;
+    }
+
+    botao.disabled = true;
+    botao.textContent = "Consultando...";
+
+    try {
+        const resposta = await fetch("/api/consultar-resultado", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ codigo })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || "Não foi possível consultar."
+            );
+        }
+
+        resultadoDiv.innerHTML = "";
+
+        const saudacao = document.createElement("p");
+        saudacao.textContent = `Olá, ${dados.participante}!`;
+
+        const titulo = document.createElement("h3");
+        titulo.textContent = "Você tirou:";
+
+        const nome = document.createElement("strong");
+        nome.textContent = dados.sorteado;
+
+        const voltar = document.createElement("button");
+        voltar.textContent = "← Voltar ao início";
+        voltar.classList.add("botao-voltar-inicio");
+        voltar.onclick = voltarInicio;
+
+        resultadoDiv.append(
+            saudacao,
+            titulo,
+            nome,
+            voltar
+        );
+
+        formulario.style.display = "none";
+        resultadoDiv.style.display = "block";
+
+    } catch (erro) {
+        alert(erro.message);
+
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Consultar resultado →";
+    }
+}
+
+window.consultarResultado = consultarResultado;
+
+
+// LOGIN DO ORGANIZADOR
+
+async function loginOrganizador() {
+    const sorteioId = document
+        .getElementById("sorteioIdAdmin")
+        .value.trim();
+
+    const senha = document
+        .getElementById("senhaLoginAdmin")
+        .value;
+
+    const botao = document.getElementById("botaoLoginAdmin");
+
+    if (!sorteioId || !senha) {
+        alert("Preencha o identificador e a senha.");
+        return;
+    }
+
+    botao.disabled = true;
+    botao.textContent = "Entrando...";
+
+    try {
+        const resposta = await fetch("/api/login-admin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                sorteioId: sorteioId,
+                senha: senha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || "Não foi possível entrar."
+            );
+        }
+
+        sessionStorage.setItem("tokenAdmin", dados.token);
+
+        window.location.href =
+            `admin.html?sorteio=${encodeURIComponent(sorteioId)}`;
+
+    } catch (erro) {
+        alert(erro.message);
+
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Entrar no painel →";
+    }
+}
+
+window.loginOrganizador = loginOrganizador;> {
             try {
                 await navigator.clipboard.writeText(pessoa.codigo);
 
