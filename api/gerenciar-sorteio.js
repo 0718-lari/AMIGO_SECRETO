@@ -1,19 +1,20 @@
+const { initializeApp, cert, getApps } = require("firebase-admin/app");
+const { getFirestore } = require("firebase-admin/firestore");
 
-const admin = require("firebase-admin");
 const autenticarAdmin = require("../lib/autenticar-admin");
 
-if (!admin.apps.length) {
+// Inicialização do Firebase
+if (getApps().length === 0) {
     const credencial = JSON.parse(
         process.env.FIREBASE_SERVICE_ACCOUNT
     );
 
-    admin.initializeApp({
-        credential: admin.credential.cert(credencial)
+    initializeApp({
+        credential: cert(credencial)
     });
 }
 
-const db = admin.firestore();
-
+const db = getFirestore();
 module.exports = async (req, res) => {
     if (req.method !== "POST") {
         return res.status(405).json({

@@ -1,25 +1,28 @@
 
-const admin = require("firebase-admin");
+const { initializeApp, cert, getApps } = require("firebase-admin/app");
+const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const bcrypt = require("bcryptjs");
 const crypto = require("crypto");
 
-// Inicializa o Firebase Admin uma única vez
-if (!admin.apps.length) {
+// Inicialização do Firebase
+if (getApps().length === 0) {
     const credencial = JSON.parse(
         process.env.FIREBASE_SERVICE_ACCOUNT
     );
 
-    admin.initializeApp({
-        credential: admin.credential.cert(credencial)
+    initializeApp({
+        credential: cert(credencial)
     });
 }
 
-const db = admin.firestore();
+const db = getFirestore();
 
+// Gera código individual de 12 caracteres
 function gerarCodigo() {
     return crypto.randomBytes(6).toString("hex").toUpperCase();
 }
 
+// Embaralha os participantes
 function embaralhar(lista) {
     const resultado = [...lista];
 
@@ -93,8 +96,9 @@ module.exports = async (req, res) => {
             });
         }
 
-        // Embaralha e cria uma distribuição sem auto-sorteio
+        // Cria uma distribuição sem auto-sorteio
         const embaralhados = embaralhar(nomes);
+
         const deslocamento = crypto.randomInt(
             1,
             embaralhados.length
@@ -106,8 +110,10 @@ module.exports = async (req, res) => {
             ]
         );
 
+        // Protege a senha do organizador
         const senhaHash = await bcrypt.hash(senha_admin, 12);
 
+        // Cria o sorteio no Firestore
         const sorteioRef = db.collection("sorteios").doc();
 
         const lote = db.batch();
@@ -117,13 +123,14 @@ module.exports = async (req, res) => {
             senhaAdminHash: senhaHash,
             totalParticipantes: nomes.length,
             status: "ativo",
-            criadoEm: admin.firestore.FieldValue.serverTimestamp()
+            criadoEm: FieldValue.serverTimestamp()
         });
 
         const codigosParaOrganizador = [];
 
         for (let i = 0; i < nomes.length; i++) {
             const codigo = gerarCodigo();
+
             const codigoHash = crypto
                 .createHash("sha256")
                 .update(codigo)
