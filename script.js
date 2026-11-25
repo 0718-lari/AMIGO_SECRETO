@@ -108,8 +108,8 @@ async function prepararSorteio() {
         return;
     }
 
-    if (senhaAdmin.length < 8) {
-        alert("A senha deve ter pelo menos 8 caracteres.");
+    if (senhaAdmin.length < 12) {
+        alert("A senha deve ter pelo menos 12 caracteres.");
         return;
     }
 
@@ -338,7 +338,7 @@ async function consultarResultado() {
     const codigo = campo.value.trim().toUpperCase();
 
     if (!/^[A-F0-9]{12}$/.test(codigo)) {
-        alert("Digite um código válido de 8 caracteres.");
+        alert("Digite um código válido de  caracteres.");
         return;
     }
 
