@@ -1,4 +1,3 @@
-
 const { initializeApp, cert, getApps } = require("firebase-admin/app");
 const { getFirestore, FieldValue } = require("firebase-admin/firestore");
 const bcrypt = require("bcryptjs");
@@ -7,7 +6,10 @@ const crypto = require("crypto");
 // Inicialização do Firebase
 if (getApps().length === 0) {
     const credencial = JSON.parse(
-        process.env.FIREBASE_SERVICE_ACCOUNT
+        Buffer.from(
+            process.env.FIREBASE_SERVICE_ACCOUNT_BASE64,
+            "base64"
+        ).toString("utf8")
     );
 
     initializeApp({
