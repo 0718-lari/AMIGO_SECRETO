@@ -35,10 +35,21 @@
             <p class="descricao"> Reúna pessoas especiais, organize seu amigo secreto e descubra quem você vai
                 presentear!</p>
 
+
             <div class="acoes">
-                <button class="botao-principal" onclick="irParaCriar()">Crie amigo secreto</button>
-                <button class="botao-secundario" onclick="irParaParticipar()">Já tenho um código</button>
+                <button class="botao-principal" onclick="irParaCriar()">
+                    Crie amigo secreto
+                </button>
+
+                <button class="botao-secundario" onclick="irParaParticipar()">
+                    Já tenho um código
+                </button>
+
+                <button class="botao-secundario" onclick="irParaLoginAdmin()">
+                    Área do organizador
+                </button>
             </div>
+
 
             <div class="detalhe"><span>🎁</span><span>Compartilhe momentos especiais neste Natal.</span></div>
         </section>
@@ -134,6 +145,43 @@
             </div>
 
         </section>
+
+        <!-- TELA DO ORGANIZADOR -->
+        <section class="tela-admin-login" id="telaAdminLogin" style="display: none;">
+
+            <button class="voltar" onclick="voltarInicio()">
+                ← Voltar
+            </button>
+
+            <div class="formulario">
+
+                <div class="enfeite">🎄 🔐 ✨</div>
+
+                <p class="subtitulo">ÁREA RESTRITA</p>
+
+                <h2>Acesso do <span>organizador</span></h2>
+
+                <p class="descricao">
+                    Entre com os dados do seu sorteio para acessar o painel.
+                </p>
+
+                <div class="campo">
+                    <label for="sorteioIdAdmin">Identificador do sorteio</label>
+                    <input type="text" id="sorteioIdAdmin" placeholder="Digite o identificador do sorteio">
+                </div>
+
+                <div class="campo">
+                    <label for="senhaLoginAdmin">Senha do organizador</label>
+                    <input type="password" id="senhaLoginAdmin" placeholder="Digite sua senha">
+                </div>
+
+                <button class="botao-principal" id="botaoLoginAdmin" onclick="loginOrganizador()">
+                    Entrar no painel →
+                </button>
+
+            </div>
+        </section>
+
 
     </main>
 

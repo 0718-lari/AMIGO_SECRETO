@@ -339,3 +339,77 @@ footer {
     font-family: 'Playfair Display', serif;
     font-size: 30px;
 }
+
+/* BOTÃO CONSULTAR RESULTADO */
+
+#botaoConsultar {
+    display: block;
+    width: 100%;
+    margin-top: 22px;
+    padding: 15px 20px;
+
+    background: #d8bd7a;
+    color: #183B2D;
+
+    border: none;
+    border-radius: 8px;
+
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#botaoConsultar:hover {
+    background: #e8d39b;
+    transform: translateY(-2px);
+}
+
+#botaoConsultar:active {
+    transform: translateY(0);
+}
+
+#botaoConsultar:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* TELA DE LOGIN DO ORGANIZADOR */
+
+.tela-admin-login {
+    width: 100%;
+    min-height: 70vh;
+    padding: 40px 20px;
+    display: none;
+}
+
+.tela-admin-login .formulario {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.tela-admin-login .campo {
+    margin-bottom: 20px;
+}
+
+.tela-admin-login .campo input {
+    width: 100%;
+}
+
+.tela-admin-login .botao-principal {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.tela-admin-login .voltar {
+    margin-bottom: 20px;
+}
+
+#botaoLoginAdmin:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}

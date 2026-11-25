@@ -3,24 +3,37 @@ let participantes = [];
 
 // ELEMENTOS E NAVEGAÇÃO
 
+
+// ELEMENTOS E NAVEGAÇÃO
+
 function irParaCriar() {
     document.querySelector(".principal").style.display = "none";
     document.getElementById("telaParticipar").style.display = "none";
+    document.getElementById("telaAdminLogin").style.display = "none";
     document.getElementById("telaCriar").style.display = "block";
 }
 
 function irParaParticipar() {
     document.querySelector(".principal").style.display = "none";
     document.getElementById("telaCriar").style.display = "none";
+    document.getElementById("telaAdminLogin").style.display = "none";
     document.getElementById("telaParticipar").style.display = "block";
 
     document.getElementById("formularioConsulta").style.display = "block";
     document.getElementById("resultadoParticipante").style.display = "none";
 }
 
+function irParaLoginAdmin() {
+    document.querySelector(".principal").style.display = "none";
+    document.getElementById("telaCriar").style.display = "none";
+    document.getElementById("telaParticipar").style.display = "none";
+    document.getElementById("telaAdminLogin").style.display = "block";
+}
+
 function voltarInicio() {
     document.getElementById("telaCriar").style.display = "none";
     document.getElementById("telaParticipar").style.display = "none";
+    document.getElementById("telaAdminLogin").style.display = "none";
     document.querySelector(".principal").style.display = "block";
 
     document.getElementById("formularioConsulta").style.display = "block";
@@ -30,6 +43,7 @@ function voltarInicio() {
 
 window.irParaCriar = irParaCriar;
 window.irParaParticipar = irParaParticipar;
+window.irParaLoginAdmin = irParaLoginAdmin;
 window.voltarInicio = voltarInicio;
 
 // ADICIONAR PARTICIPANTES
@@ -414,3 +428,61 @@ async function consultarResultado() {
 }
 
 window.consultarResultado = consultarResultado;
+
+
+// LOGIN DO ORGANIZADOR
+
+async function loginOrganizador() {
+    const sorteioId = document
+        .getElementById("sorteioIdAdmin")
+        .value.trim();
+
+    const senha = document
+        .getElementById("senhaLoginAdmin")
+        .value;
+
+    const botao = document.getElementById("botaoLoginAdmin");
+
+    if (!sorteioId || !senha) {
+        alert("Preencha o identificador e a senha.");
+        return;
+    }
+
+    botao.disabled = true;
+    botao.textContent = "Entrando...";
+
+    try {
+        const resposta = await fetch("/api/login-admin", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                sorteioId: sorteioId,
+                senha: senha
+            })
+        });
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok) {
+            throw new Error(
+                dados.erro || "Não foi possível entrar."
+            );
+        }
+
+        sessionStorage.setItem("tokenAdmin", dados.token);
+
+        window.location.href =
+            `admin.html?sorteio=${encodeURIComponent(sorteioId)}`;
+
+    } catch (erro) {
+        alert(erro.message);
+
+    } finally {
+        botao.disabled = false;
+        botao.textContent = "Entrar no painel →";
+    }
+}
+
+window.loginOrganizador = loginOrganizador;
