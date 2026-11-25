@@ -180,13 +180,38 @@ footer {
     padding: 25px 20px 60px;
 }
 
+
 .voltar {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
     background: transparent;
     border: 1px solid #d8bd7a;
-    color: #fffaf0;
-    padding: 10px 18px;
+    color: #d8bd7a;
+
+    padding: 11px 20px;
     margin-bottom: 30px;
+
+    border-radius: 8px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+.voltar:hover {
+    background: #d8bd7a;
+    color: #183B2D;
+    transform: translateX(-3px);
+}
+
+.voltar:active {
+    transform: translateX(0);
+}
+
 
 .formulario {
     background: #214534;
